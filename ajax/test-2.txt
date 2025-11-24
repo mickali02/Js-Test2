@@ -1,0 +1,37 @@
+Test #2: Random Image + Random Quote Poster
+
+This worksheet  guides you through the required steps to complete the test.  Fill in each section as you work.
+1. Default Content
+Write your chosen default image URL:
+______________________________
+Write your chosen default quote:
+______________________________
+2. HTML Structure
+Describe the elements you will include (poster area, button, status message):
+____________________________________________________________
+____________________________________________________________
+3. CSS Overlay Strategy
+Explain how you will place the quote on top of the image:
+____________________________________________________________
+____________________________________________________________
+4. Fetch Logic Plan
+What API endpoints will you call?
+Image API: __________________________
+Quote API: __________________________
+Describe the steps your fetch logic will follow:
+____________________________________________________________
+____________________________________________________________
+5. Error Handling Plan
+Explain how your page will behave if:
+- Image fetch fails: ________________________________________
+- Quote fetch fails: ________________________________________
+- Both fail: _______________________________________________
+6. Final Verification
+Checklist:
+- Default content shows on page load
+- Button fetches new image + quote
+- Status message updates
+- Poster updates or falls back to defaults
+- No blank UI states
+
+

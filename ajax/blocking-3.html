@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Blocking vs Non-Blocking Demo</title>
+    <style>
+      body {
+        font-family: sans-serif;
+        margin: 2rem;
+      }
+      button {
+        margin-right: 10px;
+        padding: 10px 20px;
+        font-size: 1rem;
+      }
+      #bar-container {
+        width: 300px;
+        height: 20px;
+        background: #eee;
+        margin-top: 20px;
+        border-radius: 10px;
+        overflow: hidden;
+      }
+      #bar {
+        height: 100%;
+        width: 0%;
+        background: #4caf50;
+        transition: width 0.1s;
+      }
+    </style>
+  </head>
+  <body>
+    <h2>Blocking vs Non-Blocking Demo</h2>
+
+    <button id="blockBtn">Run Blocking Code</button>
+    <button id="nonBlockBtn">Run Non-Blocking Code</button>
+    <p id="status">Click a button to begin.</p>
+
+    <div id="bar-container">
+      <div id="bar"></div>
+    </div>
+
+    <script>
+      const status = document.getElementById("status");
+      const bar = document.getElementById("bar");
+
+      // Animate the progress bar continuously
+      let progress = 0;
+      setInterval(() => {
+        progress = (progress + 1) % 101; // loops 0 → 100 → 0
+        bar.style.width = progress + "%";
+      }, 30); // updates ~33 times per second
+
+      function blockingCode() {
+        status.textContent = "🚧 Blocking... browser frozen for 4s";
+        const start = Date.now();
+        while (Date.now() - start < 4000) {
+          // Busy-wait: freezes the animation
+        }
+        status.textContent = "✅ Blocking finished";
+      }
+
+      function nonBlockingCode() {
+        status.textContent = "⏱ Waiting asynchronously for 4s...";
+        setTimeout(() => {
+          status.textContent = "✅ Non-blocking finished";
+        }, 4000);
+      }
+
+      document.getElementById("blockBtn").onclick = blockingCode;
+      document.getElementById("nonBlockBtn").onclick = nonBlockingCode;
+    </script>
+  </body>
+</html>

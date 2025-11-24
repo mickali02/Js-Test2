@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Fetch Exercise – Load User</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        max-width: 600px;
+        margin: 40px auto;
+        padding: 0 16px;
+        line-height: 1.5;
+      }
+
+      h1 {
+        font-size: 1.6rem;
+        margin-bottom: 0.5rem;
+      }
+
+      .card {
+        border: 1px solid #ddd;
+        border-radius: 6px;
+        padding: 16px;
+        margin-top: 16px;
+      }
+
+      label {
+        display: inline-block;
+        margin-bottom: 8px;
+      }
+
+      input[type="number"] {
+        width: 80px;
+        padding: 6px;
+        margin-right: 8px;
+      }
+
+      button {
+        padding: 6px 12px;
+        cursor: pointer;
+      }
+
+      #status {
+        margin-top: 12px;
+        font-size: 0.95rem;
+      }
+
+      .status-ok {
+        color: #006400; /* dark green */
+      }
+
+      .status-error {
+        color: #b00020; /* red */
+      }
+
+      #userInfo {
+        margin-top: 12px;
+      }
+
+      .user-name {
+        font-weight: bold;
+        font-size: 1.1rem;
+      }
+
+      .user-email {
+        color: #555;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Load User by ID</h1>
+    <p>
+      Enter a user ID between <strong>1</strong> and <strong>10</strong> and
+      click <em>Load User</em>.
+    </p>
+
+    <div class="card">
+      <label for="userIdInput">User ID:</label>
+      <input id="userIdInput" type="number" min="1" max="10" />
+      <button id="loadUserBtn">Load User</button>
+
+      <div id="status"></div>
+      <div id="userInfo"></div>
+    </div>
+
+    <script>
+      const userIdInput = document.getElementById("userIdInput");
+      const loadUserBtn = document.getElementById("loadUserBtn");
+      const statusEl = document.getElementById("status");
+      const userInfoEl = document.getElementById("userInfo");
+
+      function setStatus(message, type) {
+        statusEl.textContent = message;
+        statusEl.className = ""; // reset
+        if (type === "ok") {
+          statusEl.classList.add("status-ok");
+        }
+        if (type === "error") {
+          statusEl.classList.add("status-error");
+        }
+      }
+
+      loadUserBtn.addEventListener("click", () => {
+        const id = userIdInput.value.trim();
+
+        // Basic input validation
+        if (!id) {
+          setStatus("Please enter a user ID (1–10).", "error");
+          userInfoEl.innerHTML = "";
+          return;
+        }
+
+        const idNumber = Number(id);
+        if (Number.isNaN(idNumber) || idNumber < 1 || idNumber > 10) {
+          setStatus("User ID must be a number between 1 and 10.", "error");
+          userInfoEl.innerHTML = "";
+          return;
+        }
+
+        setStatus("Loading user...", "ok");
+        userInfoEl.innerHTML = "";
+
+        const url = `https://jsonplaceholder.typicode.com/users/${idNumber}`;
+
+        fetch(url)
+          .then((res) => {
+            // res.ok is false for 4xx and 5xx status codes
+            if (!res.ok) {
+              if (res.status === 404) {
+                throw new Error("User not found (404).");
+              }
+              throw new Error(`Server error: ${res.status}`);
+            }
+            // Parse the body as JSON
+            return res.json();
+          })
+          .then((user) => {
+            // Display user info in the DOM
+            userInfoEl.innerHTML = `
+            <div class="user-name">${user.name}</div>
+            <div class="user-email">${user.email}</div>
+          `;
+            setStatus("User loaded successfully.", "ok");
+          })
+          .catch((err) => {
+            // Handle network errors or the errors we threw above
+            // Many browsers use TypeError for network failure/offline
+            if (err instanceof TypeError) {
+              setStatus("Network error: are you offline?", "error");
+            } else {
+              setStatus(err.message, "error");
+            }
+            userInfoEl.innerHTML = "";
+          });
+      });
+    </script>
+  </body>
+</html>

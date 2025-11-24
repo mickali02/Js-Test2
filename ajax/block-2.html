@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Blocking vs Non-Blocking Demo (with Timestamps)</title>
+    <style>
+      body {
+        font-family: sans-serif;
+        margin: 2rem;
+      }
+      button {
+        margin-right: 10px;
+        padding: 8px 16px;
+      }
+      pre {
+        background: #f4f4f4;
+        padding: 10px;
+        border-radius: 6px;
+        height: 150px;
+        overflow-y: auto;
+      }
+    </style>
+  </head>
+  <body>
+    <h2>⏳ Blocking vs Non-Blocking Demo (with Time Log)</h2>
+    <button id="blockBtn">Run Blocking Code</button>
+    <button id="nonBlockBtn">Run Non-Blocking Code</button>
+    <p id="status">Click a button to begin.</p>
+    <pre id="log"></pre>
+
+    <script>
+      const status = document.getElementById("status");
+      const log = document.getElementById("log");
+
+      // Helper: append timestamp to log
+      function addLog(msg) {
+        const now = new Date().toLocaleTimeString();
+        log.textContent += `[${now}] ${msg}\n`;
+        log.scrollTop = log.scrollHeight;
+      }
+
+      // Background clock that runs every second
+      setInterval(() => addLog("⏱ Tick (1s passed)"), 1000);
+
+      function blockingCode() {
+        status.textContent = "Blocking... (browser frozen for 6s)";
+        addLog("⚠️ Starting blocking code");
+
+        // Let browser paint "Blocking..." before freezing
+        setTimeout(() => {
+          const start = Date.now();
+          while (Date.now() - start < 6000) {
+            // Busy wait for 6 seconds — freezes everything
+          }
+          addLog("✅ Finished blocking code (6s)");
+          status.textContent = "✅ Done (after blocking 6s)";
+        }, 0);
+      }
+
+      function nonBlockingCode() {
+        status.textContent = "Waiting asynchronously for 6s...";
+        addLog("🚀 Starting non-blocking timer");
+
+        setTimeout(() => {
+          addLog("✅ Non-blocking finished (6s)");
+          status.textContent = "✅ Done (no freeze)";
+        }, 6000);
+      }
+
+      document.getElementById("blockBtn").onclick = blockingCode;
+      document.getElementById("nonBlockBtn").onclick = nonBlockingCode;
+    </script>
+  </body>
+</html>

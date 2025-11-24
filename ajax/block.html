@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Synchronous vs Asynchronous Demo</title>
+  </head>
+  <body>
+    <h2>Blocking vs Non-Blocking Demo</h2>
+    <button id="blockBtn">Run Blocking Code</button>
+    <button id="nonBlockBtn">Run Non-Blocking Code</button>
+    <p id="status">Click a button to begin.</p>
+
+    <script>
+      const status = document.getElementById("status");
+
+      function blockingCode() {
+        status.textContent = "Blocking... (browser frozen)";
+        const start = Date.now();
+        while (Date.now() - start < 9000) {
+          // Busy wait for 9 seconds
+        }
+        status.textContent = "✅ Done (after blocking 9s)";
+      }
+
+      function nonBlockingCode() {
+        status.textContent = "Waiting asynchronously...";
+        setTimeout(() => {
+          status.textContent = "✅ Done (no freeze)";
+        }, 9000);
+      }
+
+      document.getElementById("blockBtn").onclick = blockingCode;
+      document.getElementById("nonBlockBtn").onclick = nonBlockingCode;
+    </script>
+  </body>
+</html>
