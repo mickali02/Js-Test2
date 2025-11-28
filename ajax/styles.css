@@ -1,34 +1,128 @@
-#poster {
-  position: relative;
-  width: 800px;
-  height: 400px;
-  margin-bottom: 20px;
-  background-color: #333;
+/* Import a modern font */
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap');
+
+/* Basic resets and body styles */
+body {
+  font-family: 'Montserrat', sans-serif;
+  background-color: #f0f2f5;
+  color: #333;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  margin: 0;
+  padding: 2rem;
+  box-sizing: border-box;
 }
 
-#poster img {
+h1 {
+  color: #1c1e21;
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+/* Poster container with shadow and rounded corners */
+#poster {
+  position: relative;
+  width: 100%;
+  max-width: 900px;
+  aspect-ratio: 16 / 9; /* Maintain aspect ratio */
+  margin-bottom: 2rem;
+  background-color: #333;
+  border-radius: 16px;
+  overflow: hidden; /* Ensures the image corners are also rounded */
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Gradient overlay for text readability */
+#poster::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 70%;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent);
+  pointer-events: none; /* Allows clicks to go through to elements behind */
+}
+
+/* Poster image styles */
+#posterImage {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  transition: transform 0.3s ease-in-out;
 }
 
+#poster:hover #posterImage {
+  transform: scale(1.05); /* Subtle zoom on hover */
+}
+
+/* Quote text styles */
 #posterQuote {
   position: absolute;
-  bottom: 20px;
-  left: 20px;
-  right: 20px;
-  font-size: 1.5rem;
+  bottom: 30px;
+  left: 30px;
+  right: 30px;
+  font-size: 2.2rem;
+  font-weight: 700;
   color: white;
-  text-shadow: 0 0 5px black;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.7);
+  z-index: 10; /* Ensure it's above the gradient */
+  transition: opacity 0.3s ease-in-out;
 }
 
-button {
-  padding: 10px 16px;
-  cursor: pointer;
-  margin-top: 10px;
-}
-
-#status {
-  margin-top: 12px;
+/* Modern button styles */
+#generateBtn {
+  padding: 1rem 2rem;
   font-size: 1rem;
+  font-weight: 700;
+  color: white;
+  background-color: #007bff;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.2s ease;
+  box-shadow: 0 4px 15px rgba(0, 123, 255, 0.3);
+}
+
+#generateBtn:hover {
+  background-color: #0056b3;
+  transform: translateY(-2px);
+}
+
+#generateBtn:disabled {
+  background-color: #aaa;
+  cursor: not-allowed;
+  transform: translateY(0);
+}
+
+/* Status message styles */
+#status {
+  margin-top: 1.5rem;
+  font-size: 1rem;
+  color: #555;
+}
+
+/* Responsive adjustments for smaller screens */
+@media (max-width: 768px) {
+  h1 {
+    font-size: 1.5rem;
+  }
+  
+  #posterQuote {
+    font-size: 1.5rem;
+    bottom: 20px;
+    left: 20px;
+    right: 20px;
+  }
+
+  #generateBtn {
+    width: 100%;
+    max-width: 400px;
+  }
 }
